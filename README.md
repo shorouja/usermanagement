@@ -19,3 +19,6 @@
 
 - bisher kaum Tests geschrieben, ich hoffe das wird :/
 - warum funktioniert .done(),success: nicht aber dafür complete: obwohl eig. deprecated?
+
+#### Known Bugs? 
+- Password still set on new?

@@ -6,8 +6,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>Benutzerverwaltung</title>
-	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
-	<script src="jquery-3.5.1.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<!-- Fallback if internet goes Haywire -->
+	<!-- <script src="libs/jquery/3.7.1/jquery.min.js"></script> -->
 	<script>
 		function read_all_users(){
 			$.ajax({
@@ -48,8 +49,8 @@
 	<form action="classes/functions.php" id ="user_form" style="display:none;position:absolute;top:40%;left:35%;" method="post">
 		<label id="form_definition"></label><br/>
 		<input type="hidden" id="user_id" name="user_id">
-		<input type="text" id="first_name" name="first_name" placeholder="Vorname" required>
-		<input type="text" id="last_name" name="last_name" placeholder="Nachname" required>
+		<input type="text" id="first_name" name="first_name" placeholder="Vorname" >
+		<input type="text" id="last_name" name="last_name" placeholder="Nachname" >
 		<br/>
 		<input type="email" id="email" name="email" placeholder="Email" required>
 		<input type="password" id="password" name="password" placeholder="Passwort">
@@ -68,7 +69,6 @@
 <script>
 
 	var oForm = $("#user_form");
-	// oForm.on('submit',function(event){
 	oForm.submit(function(event){
 		event.preventDefault();
 		$.ajax({

@@ -8,7 +8,7 @@
 			$pdo = database::getInstance()->getConnection();
 			// validation
 			
-			if (!isset($first_name) || !isset($last_name) || !isset($email)){
+			if (!isset($first_name) && !isset($last_name) && !isset($email)){
 				// ToDo: return missing components
 				echo 'Es fehlen Daten!';
 				return;
@@ -135,6 +135,7 @@
 				$sQuery .= ' last_name = :last_name ,  ';
 			}
 			if (!empty($password)){
+				// evaluate Password identical?
 				$password = password_hash(md5($password),PASSWORD_DEFAULT);
 				$sQuery .= ' password = :password ,  ';
 			}
@@ -145,7 +146,6 @@
 			$statement = $pdo->prepare($sQuery);
 			if (!empty($first_name) && $first_name != $aOldUserdata['first_name']){
 				$statement->bindValue(':first_name', $first_name, PDO::PARAM_STR);
-				echo 'aktualisiert11';
 			}
 			if (!empty($last_name) && $last_name != $aOldUserdata['last_name']){
 				$statement->bindValue(':last_name', $last_name, PDO::PARAM_STR);

@@ -13,12 +13,14 @@ final class database {
 				\PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
 				\PDO::ATTR_EMULATE_PREPARES   => false,
 			];
+			
+			// should probably be located somewhere else for configuration
 			$host= 'localhost';
 			$db = 'usermanagement';
 			$user = 'postgres';
 			$password = 'Usk^Qp^5Jr%okjVcVGoV3P2nJ5t@%mRt';
 			$charset = 'utf8mb4';
-
+			//charset=$charset
 			$dsn = "pgsql:host=$host;port=5432;dbname=$db;";
 			$database = new PDO(
 				$dsn,

@@ -8,3 +8,12 @@ Create TABLE users (
 	password VARCHAR (255) NOT NULL,
 	created_on TIMESTAMP NOT NULL	
 )
+
+CREATE DATABASE usermanagement
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'German_Germany.1252'
+    LC_CTYPE = 'German_Germany.1252'
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
