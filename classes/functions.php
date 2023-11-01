@@ -29,7 +29,7 @@
 			// check if already exists
 			$query = 'SELECT * FROM users where email = :email';
 			$statement = $pdo->prepare($query);
-			$statement->bindValue(':email', $email);
+			$statement->bindValue(':email', $email, PDO::PARAM_STR);
 			$statement->execute();
 			$iRowCount = $statement->rowCount(); 
 			if($iRowCount == 1){
@@ -44,10 +44,10 @@
 			$query = ' INSERT INTO public.users( first_name, last_name, email, password, created_on )
 				VALUES (:first_name,:last_name,:email,:password,CURRENT_TIMESTAMP);';
 			$statement = $pdo->prepare($query);
-			$statement->bindValue(':first_name', $first_name);
-			$statement->bindValue(':last_name', $last_name);
-			$statement->bindValue(':email', $email);
-			$statement->bindValue(':password', $password);
+			$statement->bindValue(':first_name', $first_name, PDO::PARAM_STR);
+			$statement->bindValue(':last_name', $last_name, PDO::PARAM_STR);
+			$statement->bindValue(':email', $email, PDO::PARAM_STR);
+			$statement->bindValue(':password', $password, PDO::PARAM_STR);
 			$statement->execute();
 			// return all existing users? for now yes, generally only want to get the return and add it to the existing dataset 
 			return User::select_all_users();
@@ -66,12 +66,9 @@
 				foreach ($row as $key => $col_value) {
 					// $string .= $col_value;
 					// $data[$key] = $col_value;
-					if ($key == 'id'){
-						$string .= "\t\t<td id=\"$col_value\">$col_value</td>\n";
-					} else {
-						$string .= "\t\t<td>$col_value</td>\n";
-					}
+					$string .= "\t\t<td class=\"$key\" id=\"" . $key . "_" .$row['id'] . "\">$col_value</td>\n";
 				}
+				$string .= "\t\t<td><button id=\"".$row['id']."\" type=\"button\" class=\"update_user\">bearbeiten</button>\n</td>\n";
 				$string .= "\t\t<td><button id=\"".$row['id']."\" type=\"button\" class=\"delete_user\">löschen</button>\n</td>\n";
 				$string .= "\t</tr>\n";
 			}
@@ -79,11 +76,33 @@
 			echo $string;
 		}
 
-		function delete_user(){
+		public static function delete_user(int $user_id){
+			header('Content-type: application/json');
+			$pdo = database::getInstance()->getConnection();
 			// check for id
+			if(!isset($user_id)){
+				echo 'keine ID übergeben';
+				return;
+			}
 			// check if exists
+			$query = 'SELECT * FROM users where id = :user_id;';
+			$statement = $pdo->prepare($query);
+			$statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+			$statement->execute();
+			$iRowCount = $statement->rowCount(); 
+			if($iRowCount == 0){
+				// improve Errorhandling / Message
+				echo 'kein passender User gefunden';
+				return;
+			}
 			// delete
-			// return deleted id and remove from resultset
+			$query = ' DELETE FROM users WHERE id = :user_id;';
+			$statement = $pdo->prepare($query);
+			$statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+			$statement->execute();
+			// return deleted id and remove from resultset -> already done in frontend on success
+			echo 'gelöscht';
+			// return;
 		}
 
 		function update_user(){
@@ -95,6 +114,11 @@
 		User::select_all_users();
 	} else if (isset($_POST['operation']) && $_POST['operation'] == 'create'){
 		User::create_user($_POST['first_name'],$_POST['last_name'],$_POST['password'],$_POST['email']);
+	} else if (isset($_POST['operation']) && $_POST['operation'] == 'delete'){
+		User::delete_user($_POST['user_id']);
+	} else if (isset($_POST['operation']) && $_POST['operation'] == 'delete'){
+		// should i check here for changed input?
+		User::update_user($_POST['user_id'], $_POST['first_name'],$_POST['last_name'],$_POST['password'],$_POST['email']);
 	}
 
 ?>
