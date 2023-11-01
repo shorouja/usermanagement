@@ -22,3 +22,14 @@
 
 #### Known Bugs? 
 - Password still set on new?
+
+
+
+#### ToDo/thoughts:
+
+- Nutzer erst anlegen wenn E-Mail bestätigt wurde bzw. Passwort gesetzt
+- charset sicherheitshalber mit übergeben
+- löschen Safetycheck? / FK-Constraint -> stattdessen deaktivieren?
+- Passwort identisch
+- ChatGPT check?
+- versch. Tests, vorallem max 3 pro Sort ggf? Unit-Test, Acceptancetest
