@@ -62,22 +62,28 @@
 			
 			$string =  "<table>\n";
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-				$string .= "\t<tr>\n";
+				$string .= "\t<tr id='user_".$row['id']."'>\n";
 				foreach ($row as $key => $col_value) {
 					// $string .= $col_value;
 					// $data[$key] = $col_value;
-			 		$string .= "\t\t<td>$col_value</td>\n";
+					if ($key == 'id'){
+						$string .= "\t\t<td id=\"$col_value\">$col_value</td>\n";
+					} else {
+						$string .= "\t\t<td>$col_value</td>\n";
+					}
 				}
+				$string .= "\t\t<td><button id=\"".$row['id']."\" type=\"button\" class=\"delete_user\">löschen</button>\n</td>\n";
 				$string .= "\t</tr>\n";
 			}
-			// var_dump(json_encode($data));
-			// echo json_encode($data);
 			$string .= "</table>\n";
 			echo $string;
 		}
 
 		function delete_user(){
-
+			// check for id
+			// check if exists
+			// delete
+			// return deleted id and remove from resultset
 		}
 
 		function update_user(){

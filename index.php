@@ -15,11 +15,11 @@
 				dataType: 'json',
 				data: {operation: "read"},
 				beforeSend: function() {
-					$('.result').append("loading..");
+					$('.msg').toggle('display');
 				},
 				complete: function(result){
-					console.log(result)
 					$('.result').html(result.responseText);
+					$('.msg').toggle('display');
 			}
 			});
 		};
@@ -42,6 +42,7 @@
 
 <button type="button" onclick="read_all_users()">Get all</button>
 <button type="button" onclick="new_user()">Neuer Benutzer</button>
+<div class="msg" style="display:none;position:absolute;">LOADING...</div>
 <div class="result"></div>
 
 
@@ -57,18 +58,35 @@
 			type: this.method,
 			dataType: 'json',
 			beforeSend: function() {
-				$('.result').append("loading..");
+				$('.msg').toggle('display');
 			},
 			data: $(this).serialize() + "&operation=create", 
 			complete: function (result) {
-				console.log(result)
 				$('.result').html(result.responseText);
 				$("#new_user_form").toggle('display');
 			}
 
 		})
 	});
+	$(document).ready(function(){
+		$(document).on("click",".delete_user",(function(obj){
+			$.ajax({
+				url: this.action,
+				type: this.method,
+				dataType: 'json',
+				beforeSend: function() {
+					$('.msg').toggle('display');
+				},
+				data: {user_id: obj.target.id}, 
+				complete: function (result) {
+					// obj.target.parentElement.parentElement.id remove row
+					document.getElementById(obj.target.parentElement.parentElement.id).remove();
+					$('.msg').toggle('display');
 
+				}
+			})
+		}))
+	})
 </script>
 </body>
 
