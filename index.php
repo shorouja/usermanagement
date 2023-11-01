@@ -47,11 +47,12 @@
 <!-- This is gonna be display:none / block depending on state -->
 	<form action="classes/functions.php" id ="user_form" style="display:none;position:absolute;top:40%;left:35%;" method="post">
 		<label id="form_definition"></label><br/>
+		<input type="hidden" id="user_id" name="user_id">
 		<input type="text" id="first_name" name="first_name" placeholder="Vorname" required>
 		<input type="text" id="last_name" name="last_name" placeholder="Nachname" required>
 		<br/>
 		<input type="email" id="email" name="email" placeholder="Email" required>
-		<input type="password" id="password" name="password" placeholder="Passwort" required>
+		<input type="password" id="password" name="password" placeholder="Passwort">
 		<button type="submit">Abschicken</button>
 	</form>
 
@@ -77,8 +78,9 @@
 			beforeSend: function() {
 				$('.msg').toggle('display');
 			},
-			data: $(this).serialize() + "&operation=create", 
+			data: $(this).serialize() + "&operation=" + $("#user_form").attr('class'), 
 			complete: function (result) {
+				$(".msg").toggle('display');
 				$('.result').html(result.responseText);
 				$("#user_form").toggle('display');
 			}
@@ -122,31 +124,14 @@
 			} 
 			var parent = obj.target.closest("tr");
 			var cells = parent.cells;
+			$("#user_form").find("#user_id").val(cells[0].textContent);
 			$("#user_form").find("#first_name").val(cells[1].textContent);
 			$("#user_form").find("#last_name").val(cells[2].textContent);
 			$("#user_form").find("#email").val(cells[3].textContent);
 
 			$("#form_definition").text('Bearbeiten');
 
-			// $.ajax({
-			// 	url:"classes/functions.php",
-			// 	type: "POST",
-			// 	dataType: 'json',
-			// 	beforeSend: function() {
-			// 		$('.msg').toggle('display');
-			// 	},
-			// 	data: $(this).serialize() + "&operation=update&user_id=" + obj.target.id}, 
-			// 	complete: function (result) {
-			// 		// obj.target.parentElement.parentElement.id remove row
-			// 		if (result.responseText == "updated"){
-			// 			// update element? document.getElementById(obj.target.parentElement.parentElement.id).remove();
-			// 			alert("updated");
-			// 		} else {
-			// 			alert(result.responseText);
-			// 		}
-			// 		$('.msg').toggle('display');
-			// 	}
-			// })
+			
 		}))
 	})
 </script>
