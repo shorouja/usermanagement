@@ -12,7 +12,7 @@
 	<script>
 		function read_all_users(){
 			$.ajax({
-				url:"classes/functions.php",
+				url:"classes/user.php",
 				type: "POST",
 				dataType: 'json',
 				data: {operation: "read"},
@@ -46,7 +46,7 @@
 </head>
 <body>
 <!-- This is gonna be display:none / block depending on state -->
-	<form action="classes/functions.php" id ="user_form" style="display:none;position:absolute;top:40%;left:35%;" method="post">
+	<form action="classes/user.php" id ="user_form" style="display:none;position:absolute;top:40%;left:35%;" method="post">
 		<label id="form_definition"></label><br/>
 		<input type="hidden" id="user_id" name="user_id">
 		<input type="text" id="first_name" name="first_name" placeholder="Vorname" >
@@ -90,7 +90,7 @@
 	$(document).ready(function(){
 		$(document).on("click",".delete_user",(function(obj){
 			$.ajax({
-				url:"classes/functions.php",
+				url:"classes/user.php",
 				type: "POST",
 				dataType: 'json',
 				beforeSend: function() {

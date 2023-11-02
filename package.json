@@ -1,0 +1,25 @@
+{
+  "name": "usermanagement",
+  "version": "1.0.0",
+  "description": "1. installing Postgre 2. Setup XAMPP 3. setup index.php 4. setup function     1. connect to db     2. setup validation     3. setup CRUD 5. setup usertests     1. setup composer + phpunit     2. write tests",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shorouja/usermanagement.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shorouja/usermanagement/issues"
+  },
+  "homepage": "https://github.com/shorouja/usermanagement#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.39.0",
+    "@types/node": "^20.8.10"
+  }
+}

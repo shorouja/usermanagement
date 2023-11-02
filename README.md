@@ -8,6 +8,8 @@
     2. setup validation
     3. setup CRUD
 5. setup usertests
+    1. setup composer + phpunit
+    2. write tests
 
 ### Probleme
 - ich habe viel zu wenig mit Frontend / JQuery gearbeitet als das ich noch komfortabel wäre
