@@ -17,11 +17,13 @@
 				dataType: 'json',
 				data: {operation: "read"},
 				beforeSend: function() {
-					$('.msg').toggle('display');
+					$('#loadingMessage').toggle('display');
 				},
 				complete: function(result){
-					$('.result').html(result.responseText);
-					$('.msg').toggle('display');
+					var resultArray = result.responseText.split('~');
+					$("#loadingMessage").toggle('display');
+					$('#answerMessage').html(resultArray[0]);
+					$('#result').html(resultArray[1]);
 			}
 			});
 		};
@@ -49,8 +51,8 @@
 	<form action="classes/user.php" id ="user_form" style="display:none;position:absolute;top:40%;left:35%;" method="post">
 		<label id="form_definition"></label><br/>
 		<input type="hidden" id="user_id" name="user_id">
-		<input type="text" id="first_name" name="first_name" placeholder="Vorname" >
-		<input type="text" id="last_name" name="last_name" placeholder="Nachname" >
+		<input type="text" id="first_name" name="first_name" placeholder="Vorname" required>
+		<input type="text" id="last_name" name="last_name" placeholder="Nachname" required>
 		<br/>
 		<input type="email" id="email" name="email" placeholder="Email" required>
 		<input type="password" id="password" name="password" placeholder="Passwort">
@@ -59,10 +61,11 @@
 
 <div>
 
-<button type="button" onclick="read_all_users()">Get all</button>
+<button type="button" onclick="read_all_users()">Aktualisieren</button>
 <button type="button" onclick="new_user()">Neuer Benutzer</button>
-<div class="msg" style="display:none;position:absolute;top:50%;left:50%;">LOADING...</div>
-<div class="result"></div>
+<div id="loadingMessage" style="display:none;position:absolute;top:50%;left:50%;">LOADING...</div>
+<div id="answerMessage"></div>
+<div id="result"></div>
 
 
 </div>
@@ -76,13 +79,15 @@
 			type: this.method,
 			dataType: 'json',
 			beforeSend: function() {
-				$('.msg').toggle('display');
+				$('#loadingMessage').toggle('display');
 			},
 			data: $(this).serialize() + "&operation=" + $("#user_form").attr('class'), 
 			complete: function (result) {
-				$(".msg").toggle('display');
-				$('.result').html(result.responseText);
+				var resultArray = result.responseText.split('~');
+				$("#loadingMessage").toggle('display');
 				$("#user_form").toggle('display');
+				$('#answerMessage').html(resultArray[0]);
+				$('#result').html(resultArray[1]);
 			}
 
 		})
@@ -94,18 +99,14 @@
 				type: "POST",
 				dataType: 'json',
 				beforeSend: function() {
-					$('.msg').toggle('display');
+					$('#loadingMessage').toggle('display');
 				},
 				data: {user_id: obj.target.id,operation:"delete"}, 
 				complete: function (result) {
-					// obj.target.parentElement.parentElement.id remove row
-					if (result.responseText == "gelöscht"){
-						document.getElementById(obj.target.parentElement.parentElement.id).remove();
-						alert("gelöscht");
-					} else {
-						alert(result.responseText);
-					}
-					$('.msg').toggle('display');
+					var resultArray = result.responseText.split('~');
+					$('#loadingMessage').toggle('display');
+					$('#answerMessage').html(resultArray[0]);
+					$('#result').html(resultArray[1]);
 				}
 			})
 		}))
@@ -130,8 +131,6 @@
 			$("#user_form").find("#email").val(cells[3].textContent);
 
 			$("#form_definition").text('Bearbeiten');
-
-			
 		}))
 	})
 </script>

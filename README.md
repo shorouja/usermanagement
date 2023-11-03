@@ -10,28 +10,48 @@
 5. setup usertests
     1. setup composer + phpunit
     2. write tests
-
-### Probleme
-- ich habe viel zu wenig mit Frontend / JQuery gearbeitet als das ich noch komfortabel wäre
-- Setup war etwas tricky aber machbar, dauer ca. 20 - 30min vielleicht auch etwas mehr weil PostgreSQL
-- generell gesagt: das letzte Mal Projektaufsatz ist laaaaange her... zu lange #Ausbildung
-- Aufruf von Funktionen bzw. speziell verwendung der Datenbankklasse hatte so ihre Tücken 
-- Frontend ... Elemente holen war nicht einfach... $(this).xx() hat hier und da nicht funktioniert, irgendwann dann auf obj gestoßen, dann weitergekommen
-- Darstellungsoptimierung folgt noch
-
-- bisher kaum Tests geschrieben, ich hoffe das wird :/
-- warum funktioniert .done(),success: nicht aber dafür complete: obwohl eig. deprecated?
+6. setup end-to-end tests
+    1. Plugin Playwright VSCode
+    2. write tests
 
 #### Known Bugs? 
-- Password still set on new?
+- Password still set on new after create/update?
+- PHPUnit needs SQLite Connection resulting in "could not find driver" on phpunit tests
 
-
-
-#### ToDo/thoughts:
+#### thoughts
 
 - Nutzer erst anlegen wenn E-Mail bestätigt wurde bzw. Passwort gesetzt
 - charset sicherheitshalber mit übergeben
 - löschen Safetycheck? / FK-Constraint -> stattdessen deaktivieren?
 - Passwort identisch
 - ChatGPT check?
-- versch. Tests, vorallem max 3 pro Sort ggf? Unit-Test, Acceptancetest
+- versch. Tests, vorallem max 3 pro Sort ggf? Unit-Test, End-To-End
+- Man sollte vermutlich das "errorhandling" von "Fehlermeldung + Alle Ergebnisse" umstellen
+
+
+#### Tests
+- Unittests
+    - Create
+        - Success
+        - Missing Data (Frontend checks this)
+        - Wrong Data
+        - Existing Account
+        - 
+    - Read
+    - Update
+        - Success
+        - no user found
+        - no id supplied
+        - Existing User with new Email
+        - Email faulty
+        - Email missing
+        - Success with missing values
+    - Delete
+        - Success
+        - no id
+        - no user found
+
+- End-To-End-Tests
+    - CRUD
+    - CreateExistingMail
+    - UpdateExistingMail
