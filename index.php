@@ -20,6 +20,7 @@
 					$('#loadingMessage').toggle('display');
 				},
 				complete: function(result){
+					console.log(result);
 					var resultArray = result.responseText.split('~');
 					$("#loadingMessage").toggle('display');
 					$('#answerMessage').html(resultArray[0]);
@@ -87,7 +88,7 @@
 				$("#loadingMessage").toggle('display');
 				$("#user_form").toggle('display');
 				$('#answerMessage').html(resultArray[0]);
-				$('#result').html(resultArray[1]);
+				// $('#result').html(resultArray[1]);
 			}
 
 		})
@@ -106,7 +107,7 @@
 					var resultArray = result.responseText.split('~');
 					$('#loadingMessage').toggle('display');
 					$('#answerMessage').html(resultArray[0]);
-					$('#result').html(resultArray[1]);
+					// $('#result').html(resultArray[1]);
 				}
 			})
 		}))

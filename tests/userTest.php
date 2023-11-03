@@ -12,7 +12,8 @@ final class userTest extends TestCase
 		$email = 'schwabe.daniel@yahoo.de';
 		$password = 'Tester123!';
 
-		$results = User::create_user($first_name,$last_name,$email,$password);
+		$results = User::create_user($first_name,$last_name,$password,$email);
+
 		$this->assertStringStartsWith('Erfolgreich angelegt.', $results);	
 
 	}
@@ -22,7 +23,7 @@ final class userTest extends TestCase
 		$email = 'schwabe.daniel@yahoo.de';
 		$password = 'Tester123!';
 
-		$results = User::create_user($first_name,$last_name,$email,$password);
+		$results = User::create_user($first_name,$last_name,$password,$email);
 		$this->assertStringStartsWith('Zu dieser E-Mail existiert bereits ein Account.', $results);	
 
 	}
@@ -32,17 +33,17 @@ final class userTest extends TestCase
 		$email = 'schwabe.daniel';
 		$password = 'Tester123!';
 
-		$results = User::create_user($first_name,$last_name,$email,$password);
+		$results = User::create_user($first_name,$last_name,$password,$email);
 		$this->assertStringStartsWith('E-Mail entspricht nicht dem Standard.', $results);	
 
 	}
 	public function testUserCreateMissing() :void{
 		$first_name = 'Tester';
-		$last_name = 'Schwabe';
-		$email = 'schwabe.daniel';
+		$last_name = '';
+		$email = 'schwabe.daniel@yahoo.de';
 		$password = 'Tester123!';
 
-		$results = User::create_user($first_name,$last_name,$email,$password);
+		$results = User::create_user($first_name,$last_name,$password,$email);
 		$this->assertStringStartsWith('Es fehlen Daten.', $results);	
 
 	}
@@ -130,15 +131,16 @@ final class userTest extends TestCase
 
 	public function testUserUpdateMissingId() :void{
 		// this couldn't be done in FE because it's "required"
+		// this should result in typeerror int
 		$user_id = NULL;
 		$values['first_name'] = 'Tester4';
 		$values['last_name'] = '';
 		$values['email'] = 'schwabe.daniel4@yahoo.de';
 		$values['password'] = '';
-
+		$this->expectException(Error::class);
 		$results = User::update_user($user_id,$first_name,$last_name,$email,$password);
-
 		$this->assertStringStartsWith('Es wurde keine Nutzer-ID übergeben.', $results);	
+
 	}
 
 	// delete
@@ -155,8 +157,9 @@ final class userTest extends TestCase
 		
 	}
 	public function testUserDeleteNoId() :void{
-		
-		$results = User::delete_user();
+		$user_id = NULL; 
+		$this->expectException(Error::class);
+		$results = User::delete_user($user_id);
 		$this->assertStringStartsWith('Es wurde keine Nutzer-ID übergeben.', $results);	
 		
 	}

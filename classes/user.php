@@ -8,18 +8,21 @@
 			$pdo = database::getInstance()->getConnection();
 			// validation
 			
-			if (!isset($first_name) && !isset($last_name) && !isset($email) && !isset($password)){
+			if (!isset($first_name) && !isset($last_name) && !isset($email) && !isset($password) ||
+				($first_name == '' && $last_name == '' && $email == '' && $password == '')){
 				// ToDo: return missing components
-				echo 'Es fehlen Daten.~';
-				return User::select_all_users();
+				$msg = 'Es fehlen Daten.~';
+				echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 			}
 			// ToDo: security related password checks 
 
 			if (isset($email)){
 				if (!filter_var($email,FILTER_VALIDATE_EMAIL)){
 					// ToDo: implement better userfeedback i.e. what is missing exactly
-					echo "E-Mail entspricht nicht dem Standard.~";
-					return User::select_all_users();
+					$msg = 'E-Mail entspricht nicht dem Standard.~';
+					echo $msg; 
+					return $msg /*. User::select_all_users()*/;
 				};
 			}
 
@@ -31,8 +34,9 @@
 			$iRowCount = $statement->rowCount(); 
 			if($iRowCount >= 1){
 				// bitte an den Support wenden, existiert bereits ein oder mehrere Accounts ( falls später unique auf email entfernt wird )
-				echo 'Zu dieser E-Mail existiert bereits ein Account.~';
-				return User::select_all_users();
+				$msg = 'Zu dieser E-Mail existiert bereits ein Account.~';
+				echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 			} 
 			// insert
 			$sQuery = ' INSERT INTO public.users( first_name, last_name, email, password, created_on , lastedit)
@@ -44,8 +48,9 @@
 			$statement->bindValue(':password', password_hash(md5($password),PASSWORD_DEFAULT), PDO::PARAM_STR);
 			$statement->execute();
 			// return all existing users? for now yes, generally only want to get the return and add it to the existing dataset 
-			echo 'Erfolgreich angelegt.~';
-			return User::select_all_users();
+			$msg = 'Erfolgreich angelegt.~';
+			echo $msg; 
+			return $msg /*. User::select_all_users()*/;
 		}
 
 		public static function select_all_users(PDO $pdo = NULL){
@@ -54,8 +59,8 @@
 			$sQuery = 'SELECT * FROM users';
 			$statement = $pdo->prepare($sQuery);
 			$statement->execute();
-			echo 'Erfolgreich aktualisiert.~';
-			$string =  "<table>\n";
+			$string = 'Erfolgreich aktualisiert.~';
+			$string .=  "<table>\n";
 			while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 				$string .= "\t<tr id='user_".$row['id']."'>\n";
 				foreach ($row as $key => $col_value) {
@@ -69,6 +74,7 @@
 			}
 			$string .= "</table>\n";
 			echo $string;
+			return $string;
 		}
 
 		public static function delete_user(int $user_id){
@@ -76,8 +82,9 @@
 			$pdo = database::getInstance()->getConnection();
 			// check for id
 			if(!isset($user_id)){
-				echo 'Es wurde keine Nutzer-ID übergeben.~';
-				return User::select_all_users();
+				$msg = 'Es wurde keine Nutzer-ID übergeben.~';
+				echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 			}
 			// check if exists
 			$sQuery = 'SELECT * FROM users where id = :user_id;';
@@ -86,7 +93,9 @@
 			$statement->execute();
 			$iRowCount = $statement->rowCount(); 
 			if($iRowCount == 0){
-				echo 'Zu Ihrer Anfrage konnte kein Nutzer gefunden werden.~';
+				$msg = 'Zu Ihrer Anfrage konnte kein Nutzer gefunden werden.~';
+								echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 				return User::select_all_users();
 			}
 			// delete
@@ -95,28 +104,32 @@
 			$statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 			$statement->execute();
 			// return deleted id and remove from resultset -> already done in frontend on success
-			echo 'Erfolgreich gelöscht.~';
-			return User::select_all_users();
+			$msg = 'Erfolgreich gelöscht.~';
+			echo $msg; 
+			return $msg /*. User::select_all_users()*/;
 		}
 
-		public static function update_user(int $user_id,string $first_name, string $last_name, string $password, string $email){
+		public static function update_user(int $user_id,string $first_name, string $last_name , string $email, string $password){
 			header('Content-type: application/json');
 			$pdo = database::getInstance()->getConnection();
 			// check for id
 			if(empty($user_id)){
-				echo 'Es wurde keine Nutzer-ID übergeben.~';
-				return User::select_all_users();
+				$msg = 'Es wurde keine Nutzer-ID übergeben.~';
+				echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 			}
 
 			if (!empty($email)){
 				if (!filter_var($email,FILTER_VALIDATE_EMAIL)){
 					// ToDo: implement better userfeedback i.e. what is missing exactly
-					echo "E-Mail entspricht nicht dem Standard.~";
-					return User::select_all_users();
+					$msg = 'E-Mail entspricht nicht dem Standard.~';
+					echo $msg; 
+					return $msg /*. User::select_all_users()*/;
 				};
 			} else {
-				echo 'Es wurde keine E-Mail übergeben.';
-				return User::select_all_users();
+				$msg = 'Es wurde keine E-Mail übergeben.';
+				echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 			}
 			// check if someone else with that email already exists
 			$sQuery = 'SELECT * FROM users where email = :email and id != :user_id';
@@ -127,8 +140,9 @@
 			$iRowCount = $statement->rowCount(); 
 			if($iRowCount >= 1){
 				// bitte an den Support wenden, existiert bereits ein oder mehrere Accounts ( falls später unique auf email entfernt wird )
-				echo 'Zu dieser E-Mail existiert bereits ein Account.~';
-				return User::select_all_users();
+				$msg = 'Zu dieser E-Mail existiert bereits ein Account.~';
+				echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 			} 
 			// check if user itself exists
 			$sQuery = 'SELECT * FROM users where id = :user_id;';
@@ -138,8 +152,9 @@
 			$iRowCount = $statement->rowCount(); 
 			if($iRowCount == 0){
 				// improve Errorhandling / Message
-				echo 'Zu Ihrer Anfrage konnte kein Nutzer gefunden werden.~';
-				return User::select_all_users();
+				$msg = 'Zu Ihrer Anfrage konnte kein Nutzer gefunden werden.~';
+				echo $msg; 
+				return $msg /*. User::select_all_users()*/;
 			}
 			$aOldUserdata = $statement->fetch(PDO::FETCH_ASSOC);
 			// update if changed
@@ -177,8 +192,9 @@
 			$statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 			$statement->execute();
 			// return updated id and maybe highlight?
-			echo 'Erfolgreich bearbeitet.~';
-			return User::select_all_users();
+			$msg = 'Erfolgreich bearbeitet.~';
+			echo $msg; 
+			return $msg /*. User::select_all_users()*/;
 		}
 	}
 
